@@ -33,7 +33,16 @@ permission_checker = PermissionPolicyChecker(permission_policy)
 def index(request):
     # Get Videos (filtered by user permission)
     Video = get_video_model()
-    videos = Video.objects.all()
+
+    collections = permission_policy.collections_user_has_any_permission_for(
+        request.user, ['add', 'change', 'delete'])
+    if len(collections) > 1:
+        collections_to_choose = collections
+    else:
+        # no need to show a collections chooser
+        collections_to_choose = None
+
+    videos = Video.objects.filter(collection__in=collections)
 
     # Search
     query_string = None
@@ -75,6 +84,7 @@ def index(request):
             'search_form': form,
             'popular_tags': popular_tags_for_model(Video),
             'current_collection': current_collection,
+            'collections': collections_to_choose,
         })
         return response
 
