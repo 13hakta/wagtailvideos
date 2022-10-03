@@ -4,6 +4,19 @@ function createVideoChooser(id) {
     var input = $('#' + id);
     var editLink = chooserElement.find('.edit-link');
 
+    document.addEventListener('DOMContentLoaded', event => {
+        $.ajax(window.chooserUrls.videoChooser + input.val()).done(data => {
+            let videoData = data.result
+            input.val(videoData.id);
+            previewVideo.attr({
+                src: videoData.preview.url,
+                alt: videoData.title
+            });
+            chooserElement.removeClass('blank');
+            editLink.attr('href', videoData.edit_link);
+        });
+    });
+
     $('.action-choose', chooserElement).click(function() {
         ModalWorkflow({
             url: window.chooserUrls.videoChooser,
