@@ -28,14 +28,14 @@ else:
 permission_checker = PermissionPolicyChecker(permission_policy)
 
 
-@permission_checker.require_any('add', 'change', 'delete')
+@permission_checker.require_any('add', 'change', 'delete', 'choose')
 @vary_on_headers('X-Requested-With')
 def index(request):
     # Get Videos (filtered by user permission)
     Video = get_video_model()
 
     collections = permission_policy.collections_user_has_any_permission_for(
-        request.user, ['add', 'change', 'delete'])
+        request.user, ['add', 'change', 'delete', 'choose'])
     if len(collections) > 1:
         collections_to_choose = collections
     else:

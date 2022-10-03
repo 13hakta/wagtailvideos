@@ -68,6 +68,12 @@ def chooser(request):
         if collection_id:
             videos = videos.filter(collection=collection_id)
 
+        collections = permission_policy.collections_user_has_any_permission_for(
+            request.user, ['choose'])
+
+        if len(collections) > 0:
+            videos = videos.filter(collection__in=collections)
+
         searchform = SearchForm(request.GET)
         if searchform.is_valid():
             q = searchform.cleaned_data['q']
@@ -93,7 +99,10 @@ def chooser(request):
     else:
         searchform = SearchForm()
 
-        collections = Collection.objects.all()
+        collections = permission_policy.collections_user_has_permission_for(
+            request.user, 'choose'
+        )
+
         if len(collections) < 2:
             collections = None
 

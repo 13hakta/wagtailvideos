@@ -77,6 +77,7 @@ GroupVideoPermissionFormSet = collection_member_permission_formset_factory(
     [
         ('add_video', _("Add"), _("Add/edit videos you own")),
         ('change_video', _("Edit"), _("Edit any video")),
+        ('choose_video', _("Choose"), _("Choose video")),
     ],
     'wagtailvideos/permissions/includes/video_permissions_formset.html'
 )

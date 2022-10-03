@@ -245,6 +245,9 @@ class Video(AbstractVideo):
 
     class Meta:
         ordering = ['-created_at']
+        permissions = [
+            ("choose_video", "Can choose video"),
+        ]
 
 
 class TranscodingThread(threading.Thread):
